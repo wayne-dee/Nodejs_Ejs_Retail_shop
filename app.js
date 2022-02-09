@@ -12,11 +12,15 @@ const shopRoutes = require('./routes/shop');
 //rendering template engine
 // use it as html view extn "handlebars or any word" 
 app.engine(
-    'handlebars',
-    engine()
+    'hbs',
+    engine({
+      layoutsDir: 'views/layouts/',
+      defaultLayout: 'main-layout',
+      extname: 'hbs'
+    })
   );
 // using handlebars
-app.set('view engine', 'handlebars');
+app.set('view engine', 'hbs');
 // pug
 // app.set('view engine', 'pug');
 app.set('views', 'views');
