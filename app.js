@@ -10,19 +10,8 @@ const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 //rendering template engine
-// use it as html view extn "handlebars or any word" 
-app.engine(
-    'hbs',
-    engine({
-      layoutsDir: 'views/layouts/',
-      defaultLayout: 'main-layout',
-      extname: 'hbs'
-    })
-  );
-// using handlebars
-app.set('view engine', 'hbs');
-// pug
-// app.set('view engine', 'pug');
+// using EJS
+app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({extended: false}));
