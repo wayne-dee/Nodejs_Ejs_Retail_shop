@@ -7,3 +7,8 @@ nodejs installed
 - pug
 - handlebars
 - EJS
+# MVC
+- models
+- views
+- controllers
+- arrange the code in this structure.
