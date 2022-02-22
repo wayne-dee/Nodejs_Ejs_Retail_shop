@@ -12,3 +12,6 @@ nodejs installed
 - views
 - controllers
 - arrange the code in this structure.
+
+# using MYSQL database
+
