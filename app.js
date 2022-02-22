@@ -1,14 +1,17 @@
 const path = require('path');
-
 const express = require('express');
 const bodyParser = require('body-parser');
-const { engine } = require('express-handlebars');
 
 const app = express();
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
+const db = require('./util/database');
+
+
+// CONNECT TO MYSQL
+db.execute('SELECT * FROM products')
 
 //rendering template engine
 // using EJS
