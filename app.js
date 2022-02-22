@@ -12,6 +12,12 @@ const db = require('./util/database');
 
 // CONNECT TO MYSQL
 db.execute('SELECT * FROM products')
+    .then(result => {
+        console.log(result[0], result[1])
+    })
+    .catch(err => {
+        console.log(err)
+    });
 
 //rendering template engine
 // using EJS
