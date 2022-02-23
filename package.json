@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/wayne-dee/retail_shop#readme",
   "dependencies": {
-    "mysql2": "^2.3.3"
+    "add-gitignore": "^1.1.1",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.16.2"
   }
 }
