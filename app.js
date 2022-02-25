@@ -7,7 +7,9 @@ const app = express();
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
-const sequelize = require('./util/database');
+const sequelize = require('./util/database'); 
+const Product = require('./models/product');
+const User = require('./models/user');
 
 
 //rendering template engine
@@ -24,12 +26,15 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-// sync JS definition to the database
-sequelize.sync().then(result => {
-    // console.log(result)
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Product);
+
+sequelize
+  .sync({ force: true })
+  .then(result => {
+    // console.log(result);
     app.listen(3000);
-}).catch(err => {
-    console.log(err)
-})
-
-
+  })
+  .catch(err => {
+    console.log(err);
+  });
