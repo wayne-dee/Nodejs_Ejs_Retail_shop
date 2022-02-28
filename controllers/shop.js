@@ -119,6 +119,10 @@ exports.postCartDeleteProduct = (req, res, next) => {
     });
 };
 
+exports.postOrder = (req, res, next) => {
+  
+}
+
 exports.getOrders = (req, res, next) => {
   res.render('shop/orders', {
     path: '/orders',
