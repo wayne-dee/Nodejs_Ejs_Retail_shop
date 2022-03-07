@@ -11,7 +11,8 @@ const mongoConnect = callback => {
             callback()
         })
         .catch(err => {
-            console.log(err)
+            console.log(err);
+            throw err
     })
 };
 
@@ -19,7 +20,7 @@ const getDB = () => {
     if(_db) {
         return _db
     }
-    throw 'NO DATABASE FOUND'
+    // throw 'NO DATABASE FOUND';
 }
 
 exports.mongoConnect = mongoConnect;
