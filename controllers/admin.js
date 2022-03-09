@@ -14,7 +14,7 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
-  const product = new Product(title, price, imageUrl, description);
+  const product = new Product(title, price, description, imageUrl);
   product.save()
   .then(result =>{
     console.log(result)
@@ -82,9 +82,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findByPk(prodId).then(product => {
-    return product.destroy();
-  })
+  Product.deleteById(prodId)
   .then(result => {
     console.log('DESTROYED PRODUCT')
     res.redirect('/admin/products'); 
