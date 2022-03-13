@@ -14,4 +14,15 @@ nodejs installed
 - arrange the code in this structure.
 
 # using MYSQL database
+- install mysql and mysql workbench from mysql.com
+- implement the post method APIs and GET APIs for all request
+
+# using MongoDB 
+- install mongodb, and mongodb compas
+- npm install mongodb --save
+- set up mongodb account for cloud mongodb database
+- implement the post method APIs and GET APIs for all request
+
+
+
 

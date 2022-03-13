@@ -1,11 +1,11 @@
 const getDb = require('../util/database').getDb;
 
 const mongodb = require('mongodb');
-const onjectId = mongodb.ObjectId;
+const objectId = mongodb.ObjectId;
 
 class User {
   constructor(userName, email, cart, id) {
-    this.userName = name;
+    this.name = userName;
     this.email = email;
     this.cart = cart;
     this._id = id;
@@ -22,13 +22,14 @@ class User {
 
     // // flying js addinng a field
     // product.quantity = 1
-    const updatedCart = {itmes: [{...product, quantity: 1}]}
+    // storing only the product id
+    const updatedCart = {itmes: [{productId: new objectId(product._id), quantity: 1}]}
     const db = getDb();
       return db
       .collection('users')
       .updateOne({
-      _id: new onjectId(this._id)}, 
-      {$aet: {cart: updatedCart}
+      _id: new objectId(this._id)}, 
+      {$set: {cart: updatedCart}
     })
 
   }
