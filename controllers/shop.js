@@ -1,5 +1,6 @@
 const Product = require('../models/product');
 // const Cart = require('../models/cart');
+const User = require('../models/user')
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll().then(products => {
@@ -49,10 +50,6 @@ exports.getIndex = (req, res, next) => {
 exports.getCart = (req, res, next) => {
   req.user
     .getCart()
-    .then(cart =>{
-      // get products inside the cart
-      return cart.getProducts()
-    })
     .then(products => {
       res.render('shop/cart', {
         path: '/cart',
@@ -60,9 +57,7 @@ exports.getCart = (req, res, next) => {
         products: products
       });
     })
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(err => console.log(err));
 };
 
 exports.postCart = (req, res, next) => {

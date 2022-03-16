@@ -17,14 +17,17 @@ class User {
   }
 
   addToCart(product) {
-    const cartProductIndex = this.cart?.items?.findIndex(cp => {
-      let result =  cp.productId = "" + cp.productId
-      let result2 = "" + product._id
+    const cartProductIndex = this.cart.items.findIndex(cp => {
+      // Using ternary
+      // return cp.productId === cp.product_id ?  cp.productId.toString() === product._id?.toString() : " "
+      // This code snippet uses the optional chaining (?.) operator to avoid getting the error.
 
-      return result === result2
+      // The optional chaining (?.) operator short-circuits if the reference is equal 
+      // to undefined or null, otherwise it calls the toString() method.
+      return cp.productId?.toString() === product._id?.toString();
     });
     let newQuantity = 1;
-    const updatedCartItems = [{...this.cart.items}];
+    const updatedCartItems = [...this.cart.items];
 
     if (cartProductIndex >= 0) {
       newQuantity = this.cart.items[cartProductIndex].quantity + 1;
@@ -61,7 +64,7 @@ class User {
           return {
             ...p,
             quantity: this.cart.items.find(i => {
-              return i.productId.toString() === p._id.toString();
+              return i.productId?.toString() === p._id?.toString();
             }).quantity
           };
         });
