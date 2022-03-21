@@ -23,6 +23,12 @@ nodejs installed
 - set up mongodb account for cloud mongodb database
 - implement the post method APIs and GET APIs for all request
 
+# using Mongoose
+- is an Object Document Mapping Library
+- define schemas/models, instances and writes queries
+- npm install --save mongoose
+
+
 
 
 

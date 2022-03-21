@@ -19,6 +19,7 @@
   "dependencies": {
     "add-gitignore": "^1.1.1",
     "mongodb": "^4.4.1",
+    "mongoose": "^6.2.7",
     "mysql2": "^2.3.3",
     "sequelize": "^6.16.2"
   }
