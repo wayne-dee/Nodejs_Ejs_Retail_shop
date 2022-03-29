@@ -13,8 +13,8 @@
                             <h1 style="color: rgb(15, 3, 27);">Order -# <%= order._id %></h1>
                             <hr>
                             <ul>
-                                <% order.items.forEach(product => { %>
-                                    <li><%= product.title %> (<%= product.quantity %>) $<%= product.price *  product.quantity%></li>
+                                <% order.products.forEach(p => { %>
+                                    <li><%= p.product.title %> (<%= p.quantity %>) $<%= p.product.price *  p.quantity%></li>
                                 <% }); %>
                             </ul>
                         </li>
