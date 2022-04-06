@@ -34,7 +34,7 @@ app.use(shopRoutes);
 app.use(authRoutes);
 
 app.use(errorController.get404);
-
+ 
 // connect to MongoDb
 mongoose.connect('mongodb+srv://onkeo:Douglous3@retailshopnode.cwxp1.mongodb.net/shop?retryWrites=true&w=majority')
   .then(resuslt => {
