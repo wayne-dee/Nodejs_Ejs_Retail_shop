@@ -18,6 +18,7 @@
   "homepage": "https://github.com/wayne-dee/retail_shop#readme",
   "dependencies": {
     "add-gitignore": "^1.1.1",
+    "express-session": "^1.17.2",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.7",
     "mysql2": "^2.3.3",
