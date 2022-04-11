@@ -9,19 +9,16 @@ const router = express.Router();
 // /admin/add-product => GET
 router.get('/add-product', adminController.getAddProduct);
 
-// // /admin/products => GET
+// /admin/products => GET
 router.get('/products', adminController.getProducts);
 
-// // /admin/ edit product
-router.get('/edit-product/:productId', adminController.getEditProduct);
-
-// // /admin/ post edit
-router.post('/edit-product', adminController.postEditProduct);
-
-// // /admin/add-product => POST
+// /admin/add-product => POST
 router.post('/add-product', adminController.postAddProduct);
 
-// // Delete POST
+router.get('/edit-product/:productId', adminController.getEditProduct);
+
+router.post('/edit-product', adminController.postEditProduct);
+
 router.post('/delete-product', adminController.postDeleteProduct);
 
 module.exports = router;

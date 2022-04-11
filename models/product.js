@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
+
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
   title: {
-    type : String,
-    required : true
+    type: String,
+    required: true
   },
   price: {
-    type: String,
+    type: Number,
     required: true
   },
   description: {
@@ -20,9 +21,10 @@ const productSchema = new Schema({
   },
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "User"
+    ref: 'User',
+    required: true
   }
-})
+});
 
 module.exports = mongoose.model('Product', productSchema);
 
@@ -35,8 +37,7 @@ module.exports = mongoose.model('Product', productSchema);
 //     this.price = price;
 //     this.description = description;
 //     this.imageUrl = imageUrl;
-//     // ternary to check if id exists
-//     this._id = id ? new mongodb.ObjectId(id): null;
+//     this._id = id ? new mongodb.ObjectId(id) : null;
 //     this.userId = userId;
 //   }
 
@@ -89,16 +90,18 @@ module.exports = mongoose.model('Product', productSchema);
 //         console.log(err);
 //       });
 //   }
+
 //   static deleteById(prodId) {
 //     const db = getDb();
 //     return db
-//       .collection('products').deleteOne({_id: new mongodb.ObjectId(prodId) })
+//       .collection('products')
+//       .deleteOne({ _id: new mongodb.ObjectId(prodId) })
 //       .then(result => {
-//         console.log('Deleted')
+//         console.log('Deleted');
 //       })
 //       .catch(err => {
 //         console.log(err);
-//       })
+//       });
 //   }
 // }
 
