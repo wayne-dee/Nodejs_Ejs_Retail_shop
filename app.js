@@ -56,19 +56,6 @@ mongoose.connect(
   MONGODB_URI
 )
   .then(resuslt => {
-    // creating the user
-    User.findOne().then(user => {
-      if(!user) {
-        const user = new User({
-          name: "Douglas",
-          email: "dougl@haja.om",
-          cart: {
-            items: []
-          }
-        });
-        user.save()
-      }
-    })
     console.log('connected to MongoDb database')
     app.listen(3000)
   })
