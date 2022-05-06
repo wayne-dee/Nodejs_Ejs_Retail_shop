@@ -50,6 +50,15 @@ app.use((req, res, next) => {
     .catch(err => console.log(err));
 });
 
+// CSRF middleware and login
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+  // isAuthenticated: req.session.isLoggedIn,
+  // csrfToken: req.csrfToken,
+})
+
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
