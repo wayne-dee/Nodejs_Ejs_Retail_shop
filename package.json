@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/wayne-dee/retail_shop#readme",
   "dependencies": {
+    "@mailchimp/mailchimp_marketing": "^3.0.75",
     "add-gitignore": "^1.1.1",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
@@ -25,6 +26,7 @@
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.7",
     "mysql2": "^2.3.3",
+    "nodemailer": "^6.7.5",
     "sequelize": "^6.16.2"
   }
 }

@@ -1,5 +1,18 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer')
+const mailchimp = require('@mailchimp/mailchimp_marketing');
+
+var userEmail = 'dwaynewayne138@gmail.com';
+var userPassword = 'Douglous3';
+
+var transporter = nodemailer.createTransport(`smtps://${userEmail}:${userPassword}@smtp.gmail.com`);
+
+// const transporter = nodemailer.createTransport(mailchimp({
+//   auth: {
+//     api_key: '880094f3d529e9f61d8c113afd3c2a98-us11'
+//   }
+// }))
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash('error');
@@ -52,7 +65,33 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
+      // send email
+      // return transporter.sendMail({
+      //   to: email,
+      //   from: 'douglasonkeo3@gmail.com',
+      //   subject: 'Register Successful',
+      //   html: '<h1> you have successful signed up </h1>'
+      // }); 
+      // NEW
+      var mailOptions = {
+        from: userEmail,    // sender address
+        to: email, // list of receivers
+        subject: 'Demo-1', // Subject line
+        text: 'Hello world from Node.js',       // plaintext body
+        html: '<b>Hello world from Node.js</b>' // html body
+    };
+    
+    // send mail with defined transport object
+      transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            return console.log(error);
+        }
+        console.log('Message sent: ' + info.response);
     });
+    })
+      .catch(err => {
+        console.log(err)
+      })
   })
     .catch(err => {
       console.log(err)
