@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer')
 const mailchimp = require('@mailchimp/mailchimp_marketing');
 
-var userEmail = 'dwaynewayne138@gmail.com';
-var userPassword = 'Douglous3';
+var userEmail = '';
+var userPassword = '';
 
 var transporter = nodemailer.createTransport(`smtps://${userEmail}:${userPassword}@smtp.gmail.com`);
 
