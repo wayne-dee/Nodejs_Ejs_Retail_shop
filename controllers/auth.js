@@ -8,6 +8,7 @@ var userPassword = '';
 
 var transporter = nodemailer.createTransport(`smtps://${userEmail}:${userPassword}@smtp.gmail.com`);
 
+
 // const transporter = nodemailer.createTransport(mailchimp({
 //   auth: {
 //     api_key: '880094f3d529e9f61d8c113afd3c2a98-us11'
