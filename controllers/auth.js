@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const mailchimp = require('@mailchimp/mailchimp_marketing');
 
 const nodemailer = require('nodemailer');
-const secure_configuration = require('./secure');
+const secure_configuration = require('../secure/secure.json');
 
 const transporter = nodemailer.createTransport({
 service: 'gmail',
