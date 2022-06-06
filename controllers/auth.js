@@ -1,12 +1,22 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer')
 const mailchimp = require('@mailchimp/mailchimp_marketing');
 
-var userEmail = '';
-var userPassword = '';
+const nodemailer = require('nodemailer');
+const secure_configuration = require('./secure');
 
-var transporter = nodemailer.createTransport(`smtps://${userEmail}:${userPassword}@smtp.gmail.com`);
+const transporter = nodemailer.createTransport({
+service: 'gmail',
+auth: {
+  //   Test user - email from google console
+	type: 'OAuth2',
+	user: secure_configuration.EMAIL_USERNAME,
+	pass: secure_configuration.PASSWORD,
+	clientId: secure_configuration.CLIENT_ID,
+	clientSecret: secure_configuration.CLIENT_SECRET,
+	refreshToken: secure_configuration.REFRESH_TOKEN
+}
+});
 
 
 // const transporter = nodemailer.createTransport(mailchimp({
@@ -66,29 +76,21 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
-      // send email
-      // return transporter.sendMail({
-      //   to: email,
-      //   from: 'douglasonkeo3@gmail.com',
-      //   subject: 'Register Successful',
-      //   html: '<h1> you have successful signed up </h1>'
-      // }); 
-      // NEW
-      var mailOptions = {
-        from: userEmail,    // sender address
-        to: email, // list of receivers
-        subject: 'Demo-1', // Subject line
-        text: 'Hello world from Node.js',       // plaintext body
-        html: '<b>Hello world from Node.js</b>' // html body
-    };
-    
-    // send mail with defined transport object
-      transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            return console.log(error);
-        }
-        console.log('Message sent: ' + info.response);
-    });
+
+      const mailConfigurations = {
+        from: 'douglasreeeeeeeonkeo46@gmail.com',
+        to: email,
+        subject: 'Rgistration Successful',
+        text: 'Hello! Your account was registered successfully ' 
+        + 'Welcome to the communit.'
+      };
+        
+      transporter.sendMail(mailConfigurations, function(error, info){
+        if (error) throw Error(error);
+        console.log('Email Sent Successfully');
+        console.log(info);
+      });
+
     })
       .catch(err => {
         console.log(err)
