@@ -28,6 +28,9 @@ nodejs installed
 - define schemas/models, instances and writes queries
 - npm install --save mongoose
 
+## To run the project 
+run this command in the project folder
+- nodemon app.js
 
 
 
