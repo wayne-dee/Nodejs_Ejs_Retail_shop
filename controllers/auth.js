@@ -1,8 +1,9 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const mailchimp = require('@mailchimp/mailchimp_marketing');
-
 const nodemailer = require('nodemailer');
+const crypto = require('crypto')
+
 const secure_configuration = require('../secure/secure.json');
 
 const transporter = nodemailer.createTransport({
@@ -156,3 +157,44 @@ exports.getReset = (req, res, next) => {
     errorMessage: message
   });
 };
+
+exports.postReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err)
+      return res.redirect('/reset');
+    }
+    const token = buffer.toString('hex');
+    User.findOne({email: req.body.email})
+      .then(user => {
+        if (!user) {
+          req.flash('error', 'No account with that email');
+          return res.redirect('/reset');
+        }
+        user.resetToken = token;
+        user.resetTokenDate = Date.now() + 3600000;
+        return user.save()
+    })
+      .then(result => {
+        res.redirect('/')
+        const mailConfigurations = {
+          from: 'douglasonkeo46@gmail.com',
+          to: req.body.email,
+          subject: 'Password Reset',
+          html: `
+          <p> You requested a password reset</p>
+          <p> Click this link <a href="http://localhost:3000/reset/${token}">link</a> to set new password</p>
+          `
+        };
+          
+        transporter.sendMail(mailConfigurations, function(error, info){
+          if (error) throw Error(error);
+          console.log('Email Sent Successfully');
+          console.log(info);
+        });
+      })
+      .catch(err => {
+      console.log(err)
+    })
+  })
+}
