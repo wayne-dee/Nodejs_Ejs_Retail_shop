@@ -69,6 +69,8 @@ exports.postEditProduct = (req, res, next) => {
 
   Product.findById(prodId)
     .then(product => {
+      // protect editing products that don't belong to the user
+      // ....
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.description = updatedDesc;
@@ -83,7 +85,8 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  // req.user is extracted at the app.js
+  Product.find({userId: req.user._id})
     // .select('title price -_id')
     // .populate('userId', 'name')
     .then(products => {
