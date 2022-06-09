@@ -2,7 +2,7 @@ const express = require('express');
 
 const authController = require('../controllers/auth');
 
-const { check } = require('express-validator')
+const { check, body } = require('express-validator')
 
 const router = express.Router();
 
@@ -19,6 +19,17 @@ router.post('/signup',
     .custom((value, {req}) => {
         if ( value === 'test@gmail.com') {
             throw new Error ('This email is forbidden')
+        }
+        return true
+    }),
+    body(
+        'password', 
+        'please enter only text and numbers and minimum of 5 characters')
+        .isLength({min: 5 })
+        .isAlphanumeric(),
+    body('confirm-password').custom((value, { req }) => {
+        if (value !== req.body.password ) {
+            throw new Error ('Password do not match')
         }
         return true
     }), 
