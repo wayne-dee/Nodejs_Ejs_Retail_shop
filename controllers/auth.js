@@ -55,6 +55,11 @@ exports.getSignup = (req, res, next) => {
     pageTitle: 'Signup',
     isAuthenticated: false,
     errorMessage: message,
+    oldInput: {
+      email: '',
+      password: '',
+      confirmPassword: '', 
+    }
   });
 };
 
@@ -70,6 +75,11 @@ exports.postSignup = (req, res, next) => {
       pageTitle: 'Signup',
       isAuthenticated: false,
       errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword  
+      }
     });
   }
     bcrypt.hash(password, 12)
