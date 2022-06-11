@@ -11,37 +11,56 @@ router.get('/login', authController.getLogin);
 
 router.get('/signup', authController.getSignup);
 
-router.post('/login', authController.postLogin);
+router.post(
+    '/login', 
+    [
+        body('email')
+        .isEmail()
+        .withMessage('Please enter a valid email address.')
+        .normalizeEmail(),
+        body('password', 'Password has to be valid.')
+        .isLength({ min: 5 })
+        .isAlphanumeric()
+        .trim()
+    ],
+    authController.postLogin);
 
-router.post('/signup', 
-    check('email')
-    .isEmail()
-    .withMessage('please enter valid email')
-    .custom((value, {req}) => {
-    //     if ( value === 'test@gmail.com') {
-    //         throw new Error ('This email is forbidden')
-    //     }
-    //     return 
-    // check email exist ahead of time in validation
-    return User.findOne({email: value}).then(userDoc => {
-        if (userDoc) {
-          return Promise.reject(
-              'E-mail already exist, use another email'
-          )
-        }
-        })
-    }),
-    body(
-        'password', 
-        'please enter only text and numbers and minimum of 5 characters')
-        .isLength({min: 5 })
-        .isAlphanumeric(),
-    body('confirm-password').custom((value, { req }) => {
-        if (value !== req.body.password ) {
-            throw new Error ('Password do not match')
-        }
-        return true
-    }), 
+router.post(
+    '/signup', 
+    [
+        check('email')
+            .isEmail()
+            .withMessage('please enter valid email')
+            .custom((value, {req}) => {
+            //     if ( value === 'test@gmail.com') {
+            //         throw new Error ('Th is email is forbidden')
+            //     }
+            //     return 
+            // check email exist ahead of time in validation
+            return User.findOne({email: value}).then(userDoc => {
+                if (userDoc) {
+                return Promise.reject(
+                    'E-mail already exist, use another email'
+                )
+                }
+                })
+            }) 
+            .normalizeEmail(),
+        body(
+            'password', 
+            'please enter only text and numbers and minimum of 5 characters')
+            .isLength({min: 5 })
+            .isAlphanumeric()
+            .trim(),
+        body('confirmPassword')
+            .trim()
+            .custom((value, { req }) => {
+                if (value.toString() !== req.body.password.toString()) {
+                    throw new Error('Passwords have to match!');
+                  }
+                  return true;
+                })
+    ],
     authController.postSignup
     );
 
