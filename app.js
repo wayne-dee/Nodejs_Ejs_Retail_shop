@@ -41,8 +41,20 @@ app.use(csrfProtection);
 // store validation messages
 app.use(flash());
 
+
+// CSRF middleware and login
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+  // isAuthenticated: req.session.isLoggedIn,
+  // csrfToken: req.csrfToken,
+})
+
 // store user throughout the request
 app.use((req, res, next) => {
+  // throw in a syncronous code
+  // throw new Error('Error occurred)
   if (!req.session.user) {
     return next();
   }
@@ -55,18 +67,10 @@ app.use((req, res, next) => {
       next();
     })
     .catch(err => {
-      throw new Error(err)
+      // for assync code
+      next(new Error(err))
     });
 });
-
-// CSRF middleware and login
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-  next();
-  // isAuthenticated: req.session.isLoggedIn,
-  // csrfToken: req.csrfToken,
-})
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -78,7 +82,10 @@ app.use(errorController.get404);
 
 //error middleware
 app.use((error, req, res, next) => {
-  res.redirect('/500');
+  res.status(500).render('500', {
+    pageTitle: 'Error Occurred',
+    path: '/500',
+  });
 })
  
 // connect to MongoDb
