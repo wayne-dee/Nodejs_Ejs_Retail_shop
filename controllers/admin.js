@@ -58,7 +58,11 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect('/admin/products');
     })
     .catch(err => {
-      res.redirect('/500')
+      // res.redirect('/500')
+      // handle by midlware in app.js
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error)
     });
 };
 
