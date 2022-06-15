@@ -22,6 +22,15 @@ const store = new MongoDBStore({
   collection: 'sessions'
 })
 
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname)
+  }
+})
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -31,7 +40,7 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 // image name in the view editing.ejs input
-app.use(multer({dest: 'images'}).single('image'))
+app.use(multer({storage: fileStorage}).single('image'))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'my secret word', 
