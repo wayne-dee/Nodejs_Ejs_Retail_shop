@@ -51,7 +51,6 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-// image name in the view editing.ejs input
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('image'))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
@@ -65,6 +64,17 @@ app.use(csrfProtection);
 // store validation messages
 app.use(flash());
 
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+});
 
 // CSRF middleware and login
 app.use((req, res, next) => {
@@ -75,42 +85,11 @@ app.use((req, res, next) => {
   // csrfToken: req.csrfToken,
 })
 
-// store user throughout the request
-app.use((req, res, next) => {
-  // throw in a syncronous code
-  // throw new Error('Error occurred)
-  if (!req.session.user) {
-    return next();
-  }
-  User.findById(req.session.user._id)
-    .then(user => {
-      if (!user) {
-        return next();
-      }
-      req.user = user;
-      next();
-    })
-    .catch(err => {
-      // for assync code
-      next(new Error(err))
-    });
-});
-
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
-app.get('/500', errorController.get500)
-
 app.use(errorController.get404);
-
-//error middleware
-app.use((error, req, res, next) => {
-  res.status(500).render('500', {
-    pageTitle: 'Error Occurred',
-    path: '/500',
-  });
-})
  
 // connect to MongoDb
 mongoose.connect(
