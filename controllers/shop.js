@@ -124,18 +124,33 @@ exports.getOrders = (req, res, next) => {
 
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.orderId;
-  const invoiceName = 'invoice-' + orderId + '.pdf';
-  const invoicePath = path.join('data', invoiceName);
-  fs.readFile(invoicePath, (err, data) => {
-    if(err) {
-      console.log(err)
-      // next(err)
+  Order.findById(orderId).then(order => {
+    if(!order) {
+      // return next(new Error('No order found'))
+      console.log('No order found')
+      res.redirect('/404')
     }
-    // download file
-    res.setHeader('Content-Type', 'application/pdf'); // open in browser
-    res.setHeader('Content-Disposition', 'attachment; filename="' + invoiceName + '"') // download
-    res.send(data)
+    if (order.user.userId.toString() !== req.user._id.toString()) {
+      // return next(new Error('Unauthorized'))
+      console.log(err)
+    }
+    const invoiceName = 'invoice-' + orderId + '.pdf';
+    const invoicePath = path.join('data', invoiceName);
+    fs.readFile(invoicePath, (err, data) => {
+      if(err) {
+        console.log(err)
+        // next(err)
+      }
+      // download file
+      res.setHeader('Content-Type', 'application/pdf'); // open in browser
+      res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"') // download
+      res.send(data)
+    })
+  }).catch(err => {
+    // next(err)
+    console.log(err)
   })
+  
 }
 
 
