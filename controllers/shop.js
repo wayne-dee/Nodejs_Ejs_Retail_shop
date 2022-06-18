@@ -140,10 +140,33 @@ exports.getInvoice = (req, res, next) => {
 
     res.setHeader('Content-Type', 'application/pdf'); // open in browser
     res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"') // download
+
     pdfDoc = new PDFDocument();
     pdfDoc.pipe(fs.createWriteStream(invoiceName));
     pdfDoc.pipe(res)
-    pdfDoc.text('Hello world, here is your receipt');
+    pdfDoc.fontSize(26).text('Invoice', {
+      undeline: true
+    });
+    pdfDoc.text('-------------------------------------')
+
+    let totalPrice = 0
+    order.products.forEach(prod => {
+      totalPrice += prod.quantity * prod.product.price;
+      pdfDoc.fontSize(14).text(
+        prod.product.title +
+        ' - ' +
+        prod.quantity +
+        ' - ' +
+        ' ' + '@' + ' ' +
+        '$' +
+        prod.product.price +
+        ' ' + '=' + ' ' + '$' +
+        prod.quantity * prod.product.price
+      )
+    });
+    pdfDoc.text('-----------------------')
+    pdfDoc.fontSize(20).text('Total Price: $' + totalPrice);
+
     pdfDoc.end()
 
     // fs.readFile(invoicePath, (err, data) => {
