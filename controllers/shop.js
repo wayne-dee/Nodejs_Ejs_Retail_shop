@@ -31,9 +31,11 @@ exports.getProducts = (req, res, next) => {
       lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
     });
   })
-    .catch(err => {
-      console.log(err);
-    });
+  .catch(err => {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
+  });
 };
 
 exports.getProduct = (req, res, next) => {
@@ -47,7 +49,11 @@ exports.getProduct = (req, res, next) => {
         isAuthenticated: req.session.isLoggedIn
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getIndex = (req, res, next) => {
@@ -74,7 +80,9 @@ exports.getIndex = (req, res, next) => {
     });
   })
   .catch(err => {
-    console.log(err);
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
   });
 };
   
@@ -92,7 +100,11 @@ exports.getCart = (req, res, next) => {
         isAuthenticated: req.session.isLoggedIn
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getCheckout = (req, res, next) => {
@@ -113,7 +125,11 @@ exports.getCheckout = (req, res, next) => {
 
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 exports.postCart = (req, res, next) => {
@@ -125,7 +141,12 @@ exports.postCart = (req, res, next) => {
     .then(result => {
       console.log(result);
       res.redirect('/cart');
-    });
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });;
 };
 
 exports.postCartDeleteProduct = (req, res, next) => {
@@ -135,7 +156,11 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .then(result => {
       res.redirect('/cart');
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postOrder = (req, res, next) => {
@@ -174,7 +199,11 @@ exports.postOrder = (req, res, next) => {
     .then(() => {
       res.redirect('/orders');
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getOrders = (req, res, next) => {
@@ -187,26 +216,30 @@ exports.getOrders = (req, res, next) => {
         isAuthenticated: req.session.isLoggedIn
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.orderId;
   Order.findById(orderId).then(order => {
     if(!order) {
-      // return next(new Error('No order found'))
-      console.log('No order found')
-      res.redirect('/404')
+      return next(new Error('No order found'))
+      // console.log('No order found')
+      // res.redirect('/404')
     }
     if (order.user.userId.toString() !== req.user._id.toString()) {
-      // return next(new Error('Unauthorized'))
-      console.log(err)
+      return next(new Error('Unauthorized'))
+      // console.log(err)
     }
     const invoiceName = 'invoice-' + orderId + '.pdf';
     const invoicePath = path.join('data', invoiceName);
 
     res.setHeader('Content-Type', 'application/pdf'); // open in browser
-    res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"') // download
+    res.setHeader('Content-Disposition', 'inline; filename="' + invoiceName + '"') // download or open in browser
 
     pdfDoc = new PDFDocument();
     pdfDoc.pipe(fs.createWriteStream(invoiceName));
@@ -249,8 +282,8 @@ exports.getInvoice = (req, res, next) => {
     
 
   }).catch(err => {
-    // next(err)
-    console.log(err)
+    next(err)
+    // console.log(err)
   })
   
 }

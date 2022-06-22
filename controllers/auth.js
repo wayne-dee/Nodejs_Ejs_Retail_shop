@@ -1,6 +1,5 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-const mailchimp = require('@mailchimp/mailchimp_marketing');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto')
 const { validationResult } = require('express-validator')
@@ -101,23 +100,27 @@ exports.postSignup = (req, res, next) => {
       res.redirect('/login');
 
       const mailConfigurations = {
-        from: 'douglasreeeeeeeonkeo46@gmail.com',
+        from: 'douglasonkeo46@gmail.com',
         to: email,
-        subject: 'Rgistration Successful',
+        subject: 'Registration Successful',
         text: 'Hello! Your account was registered successfully ' 
         + 'Welcome to the communit.'
       };
         
       transporter.sendMail(mailConfigurations, function(error, info){
-        if (error) throw Error(error);
+        if (error) {
+          return next(error)
+        }
         console.log('Email Sent Successfully');
         console.log(info);
       });
 
     })
-      .catch(err => {
-        console.log(err)
-      })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 }
 
 
@@ -181,7 +184,11 @@ exports.postLogin = (req, res, next) => {
         res.redirect('/login');
       })
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postLogout = (req, res, next) => {
@@ -236,14 +243,18 @@ exports.postReset = (req, res, next) => {
         };
           
         transporter.sendMail(mailConfigurations, function(error, info){
-          if (error) throw Error(error);
+          if (error) {
+            return next(error)
+          }
           console.log('Email Sent Successfully');
           console.log(info);
         });
       })
       .catch(err => {
-      console.log(err)
-    })
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
   })
 }
 
@@ -268,7 +279,9 @@ exports.getNewPassword = (req, res, next) => {
       });
     })
     .catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -299,6 +312,8 @@ exports.postNewPassword = (req, res, next) => {
       res.redirect('/login');
     })
     .catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
