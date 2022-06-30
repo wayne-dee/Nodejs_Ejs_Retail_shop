@@ -30,6 +30,8 @@ nodejs installed
 
 ## To run the project 
 run this command in the project folder
+- clone my repo and cd to the folder
+- run npm install, then run
 - nodemon app.js
 
 
